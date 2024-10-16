@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: FX API
+  description: API for currency exchange rates and conversion.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/exchange-api
+    description: Local server
+
+paths:
+  /exchange-rate:
+    get:
+      summary: Get exchange rate
+      description: Retrieves the exchange rate for the specified currencies.
+      parameters:
+        - name: requiredCurrencyCodeList
+          in: query
+          required: true
+          description: Comma-separated list of required currency codes.
+          schema:
+            type: string
+        - name: currencyCode
+          in: query
+          required: true
+          description: Base currency code.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      properties:
+                        value:
+                          type: number
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /convert:
+    get:
+      summary: Convert currency
+      description: Converts an amount from one currency to another.
+      parameters:
+        - name: requiredCurrencyCode
+          in: query
+          required: true
+          description: Required currency code.
+          schema:
+            type: string
+        - name: currencyCode
+          in: query
+          required: true
+          description: Base currency code.
+          schema:
+            type: string
+        - name: amount
+          in: query
+          required: true
+          description: Amount to convert.
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: number
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
